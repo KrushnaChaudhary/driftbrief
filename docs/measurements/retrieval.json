@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "generatedAt": "2026-09-19T15:34:03.477Z",
+  "node": "v24.14.0",
+  "platform": "win32",
+  "fixture": {
+    "files": 120,
+    "language": "TypeScript",
+    "purpose": "Deterministic retrieval smoke benchmark; not an agent task benchmark"
+  },
+  "coldMs": 717.91,
+  "p50Ms": 671.23,
+  "p95Ms": 717.91,
+  "cpuMs": 4203,
+  "peakRssBytes": 101945344,
+  "retrievalPasses": 12,
+  "total": 12,
+  "agentTaskSuccess": null,
+  "providerTokens": null,
+  "billingSavings": null,
+  "limitations": [
+    "Same-process measurements; cold CLI startup and idle MCP overhead are measured separately.",
+    "No model calls. Relevant-file retrieval is not task completion.",
+    "No comparison against a whole-repository dump. No claimed token savings."
+  ],
+  "samples": [
+    {
+      "repeat": 0,
+      "query": "calculateWidget42",
+      "relevant": "src/module-42.ts",
+      "elapsedMs": 717.91,
+      "relevantRetrieved": true,
+      "bytes": 1227,
+      "estimatedTokens": 307,
+      "excerpts": 1
+    },
+    {
+      "repeat": 0,
+      "query": "module 17",
+      "relevant": "src/module-17.ts",
+      "elapsedMs": 624.21,
+      "relevantRetrieved": true,
+      "bytes": 1900,
+      "estimatedTokens": 475,
+      "excerpts": 2
+    },
+    {
+      "repeat": 0,
+      "query": "calculateWidget98",
+      "relevant": "src/module-98.ts",
+      "elapsedMs": 609.61,
+      "relevantRetrieved": true,
+      "bytes": 1239,
+      "estimatedTokens": 310,
+      "excerpts": 1
+    },
+    {
+      "repeat": 0,
+      "query": "hello thanks",
+      "relevant": null,
+      "elapsedMs": 620.34,
+      "relevantRetrieved": true,
+      "bytes": 506,
+      "estimatedTokens": 127,
+      "excerpts": 0
+    },
+    {
+      "repeat": 1,
+      "query": "calculateWidget42",
+      "relevant": "src/module-42.ts",
+      "elapsedMs": 665.02,
+      "relevantRetrieved": true,
+      "bytes": 1239,
+      "estimatedTokens": 310,
+      "excerpts": 1
+    },
+    {
+      "repeat": 1,
+      "query": "module 17",
+      "relevant": "src/module-17.ts",
+      "elapsedMs": 665.29,
+      "relevantRetrieved": true,
+      "bytes": 1900,
+      "estimatedTokens": 475,
+      "excerpts": 2
+    },
+    {
+      "repeat": 1,
+      "query": "calculateWidget98",
+      "relevant": "src/module-98.ts",
+      "elapsedMs": 671.45,
+      "relevantRetrieved": true,
+      "bytes": 1239,
+      "estimatedTokens": 310,
+      "excerpts": 1
+    },
+    {
+      "repeat": 1,
+      "query": "hello thanks",
+      "relevant": null,
+      "elapsedMs": 681.25,
+      "relevantRetrieved": true,
+      "bytes": 506,
+      "estimatedTokens": 127,
+      "excerpts": 0
+    },
+    {
+      "repeat": 2,
+      "query": "calculateWidget42",
+      "relevant": "src/module-42.ts",
+      "elapsedMs": 674.75,
+      "relevantRetrieved": true,
+      "bytes": 1239,
+      "estimatedTokens": 310,
+      "excerpts": 1
+    },
+    {
+      "repeat": 2,
+      "query": "module 17",
+      "relevant": "src/module-17.ts",
+      "elapsedMs": 671.81,
+      "relevantRetrieved": true,
+      "bytes": 1900,
+      "estimatedTokens": 475,
+      "excerpts": 2
+    },
+    {
+      "repeat": 2,
+      "query": "calculateWidget98",
+      "relevant": "src/module-98.ts",
+      "elapsedMs": 671.23,
+      "relevantRetrieved": true,
+      "bytes": 1239,
+      "estimatedTokens": 310,
+      "excerpts": 1
+    },
+    {
+      "repeat": 2,
+      "query": "hello thanks",
+      "relevant": null,
+      "elapsedMs": 663.69,
+      "relevantRetrieved": true,
+      "bytes": 506,
+      "estimatedTokens": 127,
+      "excerpts": 0
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { zipSync } from 'fflate';
+import { execFileSync } from 'node:child_process';
+const pkg=JSON.parse(await fs.readFile('package.json','utf8'));
+await fs.mkdir('release',{recursive:true});
+const files={};
+async function addTree(dir){for(const item of await fs.readdir(dir,{withFileTypes:true})){const name=dir+'/'+item.name;if(item.isDirectory())await addTree(name);else files['.driftbrief/'+name]=[new Uint8Array(await fs.readFile(name)),{mtime:new Date('2026-01-01T00:00:00Z')}];}}
+for(const name of ['run.mjs','README.md','LICENSE'])files['.driftbrief/'+name]=[new Uint8Array(await fs.readFile(name)),{mtime:new Date('2026-01-01T00:00:00Z'),attrs:(name==='run.mjs'?0o100755:0o100644)<<16}];
+await addTree('assets');
+await addTree('docs');
+await addTree('evals');
+files['.driftbrief/.gitignore']=[new TextEncoder().encode('state/\nbackups/\nreports/\ninstall.json\n'),{mtime:new Date('2026-01-01T00:00:00Z')}];
+const zipName='driftbrief-'+pkg.version+'-portable.zip';
+await fs.writeFile('release/'+zipName,zipSync(files,{level:6}));
+const npmCli=process.env.npm_execpath;
+if(!npmCli)throw new Error('Run this script through npm run release:local');
+const output=execFileSync(process.execPath,[npmCli,'pack','--ignore-scripts','--json','--pack-destination','release'],{encoding:'utf8',windowsHide:true});
+const packed=JSON.parse(output);const names=[zipName,packed[0].filename];
+const checksums=[];
+for(const name of names)checksums.push(createHash('sha256').update(await fs.readFile('release/'+name)).digest('hex')+'  '+name);
+await fs.writeFile('release/SHA256SUMS',checksums.join('\n')+'\n');
+console.log(JSON.stringify({artifacts:names.map(n=>path.resolve('release',n)),files:packed[0].entryCount,unpackedBytes:packed[0].unpackedSize},null,2));

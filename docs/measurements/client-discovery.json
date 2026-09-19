@@ -1,0 +1,69 @@
+{
+  "generatedAt": "2026-09-19T15:33:02.791Z",
+  "codex": {
+    "version": {
+      "exitCode": 0,
+      "stdout": "codex-cli 0.154.0-alpha.6.2\n",
+      "stderr": ""
+    },
+    "untrustedDiscovery": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Error: No MCP server named 'driftbrief' found.\n"
+    },
+    "trustedFixtureDiscovery": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Error: No MCP server named 'driftbrief' found.\n"
+    },
+    "scope": "Native configuration discovery only. Temporary command-line trust applies only to this generated test fixture, not user configuration; no agent invocation.",
+    "appServerConfig": {
+      "status": "project-entry-not-loaded",
+      "driftbrief": null,
+      "scope": "Read-only app-server config resolution; no thread, turn, or model call."
+    },
+    "scopedLauncherDiscovery": {
+      "exitCode": 0,
+      "stderr": "",
+      "parsed": {
+        "name": "driftbrief",
+        "enabled": true,
+        "disabled_reason": null,
+        "transport": {
+          "type": "stdio",
+          "command": "<node-executable>",
+          "args": [
+            "<driftbrief-runtime>",
+            "mcp",
+            "--root",
+            "<temporary-project>"
+          ],
+          "env": null,
+          "env_vars": [],
+          "cwd": null
+        },
+        "enabled_tools": null,
+        "disabled_tools": null,
+        "startup_timeout_sec": null,
+        "tool_timeout_sec": null
+      }
+    }
+  },
+  "claude": {
+    "version": {
+      "exitCode": 0,
+      "stdout": "2.1.246 (Claude Code)\n",
+      "stderr": ""
+    },
+    "discovery": {
+      "exitCode": 0,
+      "stdout": "driftbrief:\n  Scope: Project config (shared via .mcp.json)\n  Status: ⏸ Pending approval (run `claude` to approve)\n\nTo remove this server, run: claude mcp remove driftbrief -s project\n",
+      "stderr": ""
+    },
+    "scope": "Native discovery/approval status; no trust bypass or model calls."
+  },
+  "cursor": {
+    "status": "not-exercised",
+    "reason": "No native Cursor session available in this verification run."
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-09-19T15:33:03.378Z",
+  "node": "v24.14.0",
+  "platform": "win32",
+  "fixture": {
+    "files": 30
+  },
+  "cliSamples": [
+    {
+      "elapsedMs": 577.71,
+      "bytes": 828
+    },
+    {
+      "elapsedMs": 554.17,
+      "bytes": 828
+    },
+    {
+      "elapsedMs": 585.67,
+      "bytes": 828
+    },
+    {
+      "elapsedMs": 556.08,
+      "bytes": 828
+    },
+    {
+      "elapsedMs": 558.87,
+      "bytes": 828
+    }
+  ],
+  "hookSamples": [
+    {
+      "elapsedMs": 230.14,
+      "outputBytes": 989,
+      "injected": true
+    },
+    {
+      "elapsedMs": 225.73,
+      "outputBytes": 989,
+      "injected": true
+    },
+    {
+      "elapsedMs": 226.93,
+      "outputBytes": 989,
+      "injected": true
+    },
+    {
+      "elapsedMs": 229.56,
+      "outputBytes": 989,
+      "injected": true
+    },
+    {
+      "elapsedMs": 228.67,
+      "outputBytes": 989,
+      "injected": true
+    }
+  ],
+  "idle": {
+    "sampleMs": 35226.1,
+    "cpuMs": 125,
+    "percentOfOneCore": 0.355,
+    "rssBytes": 61931520,
+    "peakRssBytes": 71987200
+  },
+  "diskBytes": 58732,
+  "serverStderr": "",
+  "limitations": [
+    "Small synthetic fixture on this machine. Not a guarantee for large repositories.",
+    "CLI and hook timings include process startup. Hook fallbacks are reported, not counted as successful injections.",
+    "The 35-second idle sample includes lock heartbeats and the scheduled 30-second reconciliation. No task-level or provider savings measured."
+  ]
+}

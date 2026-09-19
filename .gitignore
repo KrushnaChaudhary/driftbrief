@@ -1,0 +1,8 @@
+node_modules/
+assets/
+run.mjs
+release/
+artifacts/
+.driftbrief/
+*.tgz
+coverage/
