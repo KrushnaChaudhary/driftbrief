@@ -17,7 +17,7 @@ Version 0.1.0-beta.2. Local verification: 2026-09-19, Windows, Node.js 24.14.0.
 | Demo | Four examples, desktop/mobile layouts and offline loading |
 | Dependency audit | Zero reported vulnerabilities at verification |
 
-[CI runs](https://github.com/KrushnaChaudhary/driftbrief/actions) provide the cross-platform build record. [Client setup](compatibility.md) covers native activation.
+[All six CI jobs passed](https://github.com/KrushnaChaudhary/driftbrief/actions/runs/35457536612): Windows, macOS and Linux on Node 22 and 24. [Client setup](compatibility.md) covers native activation.
 
 The game checks use reproducible source-format fixtures with independently declared expected links. Timing and byte measurements describe those workloads. The optional evaluation harness records provider usage and complete-task outcomes when explicitly run.
 
