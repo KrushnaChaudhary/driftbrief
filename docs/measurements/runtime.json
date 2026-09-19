@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-19T15:33:03.378Z",
+  "generatedAt": "2026-09-19T16:50:12.756Z",
   "node": "v24.14.0",
   "platform": "win32",
   "fixture": {
@@ -7,61 +7,62 @@
   },
   "cliSamples": [
     {
-      "elapsedMs": 577.71,
-      "bytes": 828
+      "elapsedMs": 318.19,
+      "bytes": 1250
     },
     {
-      "elapsedMs": 554.17,
-      "bytes": 828
+      "elapsedMs": 323.8,
+      "bytes": 1250
     },
     {
-      "elapsedMs": 585.67,
-      "bytes": 828
+      "elapsedMs": 314.36,
+      "bytes": 1250
     },
     {
-      "elapsedMs": 556.08,
-      "bytes": 828
+      "elapsedMs": 310.15,
+      "bytes": 1250
     },
     {
-      "elapsedMs": 558.87,
-      "bytes": 828
+      "elapsedMs": 311.13,
+      "bytes": 1250
     }
   ],
   "hookSamples": [
     {
-      "elapsedMs": 230.14,
+      "elapsedMs": 158.85,
       "outputBytes": 989,
       "injected": true
     },
     {
-      "elapsedMs": 225.73,
+      "elapsedMs": 155.84,
       "outputBytes": 989,
       "injected": true
     },
     {
-      "elapsedMs": 226.93,
+      "elapsedMs": 163.72,
       "outputBytes": 989,
       "injected": true
     },
     {
-      "elapsedMs": 229.56,
+      "elapsedMs": 156.65,
       "outputBytes": 989,
       "injected": true
     },
     {
-      "elapsedMs": 228.67,
+      "elapsedMs": 156.03,
       "outputBytes": 989,
       "injected": true
     }
   ],
   "idle": {
-    "sampleMs": 35226.1,
-    "cpuMs": 125,
-    "percentOfOneCore": 0.355,
-    "rssBytes": 61931520,
-    "peakRssBytes": 71987200
+    "sampleMs": 35256.3,
+    "cpuMs": 171.875,
+    "percentOfOneCore": 0.488,
+    "rssBytes": 60968960,
+    "peakRssBytes": 70885376
   },
-  "diskBytes": 58732,
+  "diskBytes": 64750,
+  "toolSchemaBytes": 795,
   "serverStderr": "",
   "limitations": [
     "Small synthetic fixture on this machine. Not a guarantee for large repositories.",

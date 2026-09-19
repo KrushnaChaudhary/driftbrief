@@ -12,13 +12,14 @@ const measurements={generatedAt:new Date().toISOString(),node:process.version,pl
 try{
   for(let i=0;i<30;i++)await fs.writeFile(path.join(root,'source'+i+'.ts'),'export function calculateItem'+i+'(x: number) { return x * 2; }\n');
   await run('init','--clients','claude','--hooks');
-  for(let i=0;i<5;i++){const started=performance.now();const result=await run('context','calculateItem17');measurements.cliSamples.push({elapsedMs:+(performance.now()-started).toFixed(2),bytes:result.footprint.bytes});}
+  for(let i=0;i<5;i++){const started=performance.now();const result=await run('map','calculateItem17');measurements.cliSamples.push({elapsedMs:+(performance.now()-started).toFixed(2),bytes:result.bytes});}
   for(let i=0;i<5;i++){const started=performance.now();const output=await new Promise((resolve,reject)=>{const child=spawn(process.execPath,[bundle,'hook','--root',root,'--client','claude'],{windowsHide:true});let text='';child.stdout.on('data',d=>text+=d);child.on('error',reject);child.on('close',()=>resolve(text));child.stdin.end(JSON.stringify({hook_event_name:'UserPromptSubmit',cwd:root,prompt:'calculateItem17'}));});measurements.hookSamples.push({elapsedMs:+(performance.now()-started).toFixed(2),outputBytes:Buffer.byteLength(output),injected:Boolean(output)});}
   const transport=new StdioClientTransport({command:process.execPath,args:[bundle,'mcp','--root',root],stderr:'pipe'});
   let serverErrors='';transport.stderr.on('data',d=>serverErrors+=d);
   const client=new Client({name:'driftbrief-runtime-measurement',version:'1'});
   await client.connect(transport);
-  await client.callTool({name:'context',arguments:{query:'calculateItem17'}});
+  measurements.toolSchemaBytes=Buffer.byteLength(JSON.stringify(await client.listTools()));
+  await client.callTool({name:'map',arguments:{query:'calculateItem17'}});
   const child={pid:transport.pid};
   await new Promise(r=>setTimeout(r,1500));
   if(process.platform==='win32'){
@@ -26,7 +27,7 @@ try{
     try{const a=await snapshot(),start=performance.now();await new Promise(r=>setTimeout(r,35000));const b=await snapshot();const elapsed=performance.now()-start;measurements.idle={sampleMs:+elapsed.toFixed(1),cpuMs:b.CpuMs-a.CpuMs,percentOfOneCore:+((b.CpuMs-a.CpuMs)/elapsed*100).toFixed(3),rssBytes:b.WorkingSet64,peakRssBytes:b.PeakWorkingSet64};}catch(error){measurements.idle={unavailable:String(error.message).slice(0,500)};}
   }
   if(serverErrors)console.error(serverErrors);
-  await client.callTool({name:'context',arguments:{query:'calculateItem17'}});
+  await client.callTool({name:'map',arguments:{query:'calculateItem17'}});
   await client.close();
   measurements.serverStderr=serverErrors;
   const size=async(dir)=>{let total=0;for(const item of await fs.readdir(dir,{withFileTypes:true})){const file=path.join(dir,item.name);total+=item.isDirectory()?await size(file):(await fs.stat(file)).size;}return total;};

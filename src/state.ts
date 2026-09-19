@@ -28,7 +28,7 @@ export async function reconcile(root: string, signal?: AbortSignal): Promise<Sna
   const ident = await identity(root, signal);
   const old = await loadSnapshot(root);
   const previous = new Map((old?.identity.id === ident.id ? old.documents : []).map(d => [d.path, d]));
-  const { files, omissions } = await inventory(root, signal);
+  const { files, assets, omissions } = await inventory(root, signal);
   const documents: Snapshot['documents'] = [];
   let scannedBytes = 0; let indexBytes = 0;
   for (const file of files) {
@@ -52,7 +52,7 @@ export async function reconcile(root: string, signal?: AbortSignal): Promise<Sna
   signal?.throwIfAborted();
   const after = await identity(root, signal);
   if (after.id !== ident.id || after.head !== ident.head) throw new Error('Git state changed while indexing; retry the request');
-  return { schema: SCHEMA, identity: ident, generation: randomUUID(), reconciledAt: new Date().toISOString(), documents, omissions, scannedBytes };
+  return { schema: SCHEMA, identity: ident, generation: randomUUID(), reconciledAt: new Date().toISOString(), documents, omissions, scannedBytes, assets };
 }
 export async function publish(root: string, snapshot: Snapshot): Promise<boolean> {
   await ensureState(root);
@@ -66,10 +66,10 @@ export async function publish(root: string, snapshot: Snapshot): Promise<boolean
   try {
     const current = await loadSnapshot(root);
     if (current && current.reconciledAt > snapshot.reconciledAt) return false;
-    const compact: Snapshot = { ...snapshot, documents: [], omissions: { ...snapshot.omissions } };
+    const compact: Snapshot = { ...snapshot, documents: [], assets: [], omissions: { ...snapshot.omissions } };
     let compactBytes = Buffer.byteLength(JSON.stringify(compact));
     for (const doc of snapshot.documents) {
-      const small = { ...doc, terms: Object.fromEntries(Object.entries(doc.terms).slice(0, 24)), symbols: doc.symbols.slice(0, 10), facts: doc.facts.slice(0, 8) };
+      const small = { ...doc, terms: Object.fromEntries(Object.entries(doc.terms).slice(0, 24)), symbols: doc.symbols.slice(0, 10), facts: doc.facts.slice(0, 8), game: { ...doc.game, refs: [] } };
       compactBytes += Buffer.byteLength(JSON.stringify(small)) + 2;
       if (compactBytes > LIMITS.hookIndexBytes - 1024) { compact.omissions['compact-index-limit'] = snapshot.documents.length - compact.documents.length; break; }
       compact.documents.push(small);

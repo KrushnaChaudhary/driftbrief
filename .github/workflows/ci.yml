@@ -26,6 +26,8 @@ jobs:
       - run: npm run demo
       - run: npm run release:local
       - run: node scripts/check-release.mjs
+      - run: node scripts/check-one-step.mjs
+      - run: node scripts/game-bench.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: driftbrief-${{ matrix.os }}-node${{ matrix.node }}

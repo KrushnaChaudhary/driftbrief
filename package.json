@@ -1,7 +1,7 @@
 {
   "name": "driftbrief",
-  "version": "0.1.0-beta.1",
-  "description": "Compact AI context, checked against your current source.",
+  "version": "0.1.0-beta.2",
+  "description": "A compact, current project map for game-coding agents.",
   "type": "module",
   "license": "MIT",
   "engines": {

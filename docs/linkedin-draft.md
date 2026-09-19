@@ -1,20 +1,28 @@
-I built DriftBrief: a small folder that gives coding agents compact project evidence—and shows when that evidence has become outdated.
+AI can help plan a game system and build its foundation.
 
-The demo is simple:
-1. Ask for the authentication code and test command.
-2. Rename the module and change the script.
-3. Ask again.
-4. Watch the old source references get retired and the current excerpts appear.
+But before it does that, it needs to understand the game it is joining.
 
-It runs locally, needs no API key, and starts with your coding tool's MCP connection. The package doesn't modify source, rewrite commands, or silently skip tests. You can inspect its evidence and remove its integrations.
+Where does this feature live?
+Which scene uses this prefab?
+Which script drives it?
+What existing system should the new code connect to?
 
-Why build this? Context and memory tools already exist. I wanted a smaller, inspectable package where freshness and overhead are explicit.
+That is what I am building DriftBrief for.
 
-I deliberately haven't put “80% token savings” on the README. Smaller excerpts aren't the same as lower bills or better results. The repository includes the measurements, limitations, and a protocol for comparing complete tasks.
+A small, automatically updated project map for coding agents—so the architecture they propose and the code they scaffold can start from the actual project.
 
-This is an early beta with adapters for Codex, Claude Code, and Cursor. Check the compatibility matrix for what has actually been exercised; automatic prompt injection remains opt-in.
+One installation command. One map tool. A compact response instead of a giant context dump.
 
-[Insert public repository link after publication]
-[Attach the recorded refactor demo or evidence viewer screenshot]
+The interface stays the same across engines; the connections underneath are engine-specific:
+• Unity: scripts, prefabs, scenes and GUID references.
+• Unreal: modules, source relationships and asset locations.
+• HTML5: imports, scene transitions and asset paths, including exact Cocos UUID links.
 
-Feedback I'd find useful: a real task where this prevents repeated exploration—or where its overhead makes things worse.
+It runs locally, requires no API key or editor plugin, and does not edit the game.
+
+It is an early beta. Binary Blueprint internals and live editor state are outside this version, and I am measuring usefulness before claiming time or token savings.
+
+[Add repository link after publication]
+[Attach the game-map demo]
+
+Planning to add Godot next.

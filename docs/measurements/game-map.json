@@ -1,0 +1,253 @@
+{
+  "generatedAt": "2026-09-19T16:50:06.460Z",
+  "node": "v24.14.0",
+  "platform": "win32",
+  "samples": [
+    {
+      "engine": "unity",
+      "repeat": 0,
+      "files": 87,
+      "elapsedMs": 570.44,
+      "bytes": 2161,
+      "estimatedTokens": 541,
+      "expected": [
+        {
+          "from": "Assets/Prefabs/Player.prefab",
+          "to": "Assets/Scripts/PlayerMovement.cs",
+          "found": true
+        },
+        {
+          "from": "Assets/Scenes/Arena.unity",
+          "to": "Assets/Prefabs/Player.prefab",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "unity",
+      "repeat": 1,
+      "files": 87,
+      "elapsedMs": 481.99,
+      "bytes": 2174,
+      "estimatedTokens": 544,
+      "expected": [
+        {
+          "from": "Assets/Prefabs/Player.prefab",
+          "to": "Assets/Scripts/PlayerMovement.cs",
+          "found": true
+        },
+        {
+          "from": "Assets/Scenes/Arena.unity",
+          "to": "Assets/Prefabs/Player.prefab",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "unity",
+      "repeat": 2,
+      "files": 87,
+      "elapsedMs": 474.4,
+      "bytes": 2174,
+      "estimatedTokens": 544,
+      "expected": [
+        {
+          "from": "Assets/Prefabs/Player.prefab",
+          "to": "Assets/Scripts/PlayerMovement.cs",
+          "found": true
+        },
+        {
+          "from": "Assets/Scenes/Arena.unity",
+          "to": "Assets/Prefabs/Player.prefab",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "unreal",
+      "repeat": 0,
+      "files": 86,
+      "elapsedMs": 490.14,
+      "bytes": 1164,
+      "estimatedTokens": 291,
+      "expected": [
+        {
+          "from": "Config/DefaultEngine.ini",
+          "to": "Content/Maps/Arena.umap",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "unreal",
+      "repeat": 1,
+      "files": 86,
+      "elapsedMs": 466.89,
+      "bytes": 1177,
+      "estimatedTokens": 295,
+      "expected": [
+        {
+          "from": "Config/DefaultEngine.ini",
+          "to": "Content/Maps/Arena.umap",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "unreal",
+      "repeat": 2,
+      "files": 86,
+      "elapsedMs": 471.77,
+      "bytes": 1177,
+      "estimatedTokens": 295,
+      "expected": [
+        {
+          "from": "Config/DefaultEngine.ini",
+          "to": "Content/Maps/Arena.umap",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "h5",
+      "repeat": 0,
+      "files": 85,
+      "elapsedMs": 496.76,
+      "bytes": 1719,
+      "estimatedTokens": 430,
+      "expected": [
+        {
+          "from": "src/main.ts",
+          "to": "src/Boot.ts",
+          "found": true
+        },
+        {
+          "from": "src/Boot.ts",
+          "to": "src/Play.ts",
+          "found": true
+        },
+        {
+          "from": "src/Boot.ts",
+          "to": "public/assets/player.png",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "h5",
+      "repeat": 1,
+      "files": 85,
+      "elapsedMs": 472.12,
+      "bytes": 1732,
+      "estimatedTokens": 433,
+      "expected": [
+        {
+          "from": "src/main.ts",
+          "to": "src/Boot.ts",
+          "found": true
+        },
+        {
+          "from": "src/Boot.ts",
+          "to": "src/Play.ts",
+          "found": true
+        },
+        {
+          "from": "src/Boot.ts",
+          "to": "public/assets/player.png",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "h5",
+      "repeat": 2,
+      "files": 85,
+      "elapsedMs": 470.18,
+      "bytes": 1732,
+      "estimatedTokens": 433,
+      "expected": [
+        {
+          "from": "src/main.ts",
+          "to": "src/Boot.ts",
+          "found": true
+        },
+        {
+          "from": "src/Boot.ts",
+          "to": "src/Play.ts",
+          "found": true
+        },
+        {
+          "from": "src/Boot.ts",
+          "to": "public/assets/player.png",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "cocos",
+      "repeat": 0,
+      "files": 83,
+      "elapsedMs": 516.58,
+      "bytes": 1372,
+      "estimatedTokens": 343,
+      "expected": [
+        {
+          "from": "assets/Menu.scene",
+          "to": "assets/Button.prefab",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "cocos",
+      "repeat": 1,
+      "files": 83,
+      "elapsedMs": 455.68,
+      "bytes": 1385,
+      "estimatedTokens": 347,
+      "expected": [
+        {
+          "from": "assets/Menu.scene",
+          "to": "assets/Button.prefab",
+          "found": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "engine": "cocos",
+      "repeat": 2,
+      "files": 83,
+      "elapsedMs": 451.35,
+      "bytes": 1385,
+      "estimatedTokens": 347,
+      "expected": [
+        {
+          "from": "assets/Menu.scene",
+          "to": "assets/Button.prefab",
+          "found": true
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "agentTokens": null,
+  "agentTaskSuccess": null,
+  "limitations": [
+    "Synthetic source-format fixtures, not engine-built games.",
+    "Fresh process time includes Node startup. No model calls or task-level savings measured.",
+    "Expected relationships are declared independently of the map implementation."
+  ],
+  "passed": 12,
+  "total": 12
+}

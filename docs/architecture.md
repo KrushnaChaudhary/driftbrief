@@ -1,49 +1,35 @@
-# Architecture and contracts
+# Architecture
 
-## Data flow
+DriftBrief helps an agent understand an existing game before planning or building a system. It maps where project pieces connect; the agent handles reasoning and implementation.
 
-Client → stdio MCP → reconcile eligible files → deterministic ranking → verified excerpts → bounded JSON receipt.
+## One interface, engine-specific facts
 
-Codex/Claude optional prompt hooks → bounded compact index → source re-read → advisory additional context. Hook failure returns no output, with exit zero.
+Client → one stdio MCP tool `map` → bounded file reconciliation → relationship resolution → focused selection → selected-source verification → compact JSON.
 
-Sources are data, not behavioral instructions. Existing AGENTS/CLAUDE files remain managed by their native clients and are excluded from retrieval.
+A blank query returns an overview. A feature, class or scene query selects relevant paths and expands at most two relationship hops. Up to 50,000 relationships are resolved locally. Default output is 4,000 bytes, including metadata; configurable range 1,500–12,000.
 
-## Index and ranking
+The result contains engine hints, coverage, directory areas, selected nodes, reference locations, verified source hashes and omissions. UTF-8 bytes/4 is only a token estimate.
 
-Git enumeration uses NUL-separated paths, includes eligible untracked files, and disables optional Git locks and external filesystem-monitor commands per invocation. Non-Git projects use bounded traversal and nested ignore rules. Package exclusions apply even to tracked secrets.
+Unity resolves GUIDs through .meta files. Cocos resolves exact UUIDs through top-level JSON metadata. C#/C++ declaration and include adapters are lexical, not compiler analysis. Unreal modules and /Game path strings resolve to real files. JS/TS imports, Phaser literal scene keys and asset paths resolve only when unambiguous.
 
-Each eligible file is read within a size cap. Reads check file identity, size and modification metadata around the operation. Known-secret detection runs before any source-derived state is persisted. SHA-256 identities support reuse of parsed symbols and term frequencies. Tree-sitter parses JS/TS/TSX/Python without loading project modules. Other source uses text retrieval.
+Binary assets are path/existence-only nodes. No Blueprint graph or live editor state is inferred. Dynamic paths, aliases, external packages and Cocos compressed/subasset UUIDs may be unresolved. Godot is planned, not supported by a dedicated adapter yet.
 
-Ranking combines term frequency/inverse document frequency, path matches, symbol matches and explicit path hints. Strong matches and rare query terms are favored; at most six candidates are selected. This is lexical retrieval, not an embedding service or full semantic reference graph.
+## Small and fresh
 
-## Freshness
+Each map request reconciles eligible files and hashes the bounded text inventory; unchanged hashes reuse parsed data. Git identity/HEAD stability is checked. Selected source and supporting metadata are read again before delivery. Changed or unavailable evidence and its dependent links are omitted.
 
-An MCP query rebuilds the eligible inventory and hashes its bounded source set. It verifies HEAD stability across reconciliation and re-reads selected files before emitting excerpts. A candidate changed between ranking and reading is omitted. Receipts record source verification independently from index reconciliation.
+A single background owner debounces watcher hints and reconciles every 30 seconds while connected. Queries remain usable from other clients. Distinct ownership/publication locks expire after missed heartbeats. Complete index generations are immutable and the current pointer is replaced atomically.
 
-Hook snapshots are deliberately smaller and may omit files. They validate worktree/commit identity and candidate hashes, but do not claim current retrieval coverage. The hook processing target is 250 ms; a 500 ms internal watchdog and two-second host timeout bound failure behavior. Node startup and operating-system scheduling are outside the internal processing target.
+Bounds: 5,000 text files, 32 MiB text, 512 KiB per file, approximately 12 MiB document index; 5,000 opaque paths within 512 KiB; three generations. Metadata IDs do not create bulky keyword indexes. Map queries save no prompts, transcripts or evidence receipt history.
 
-The previous retained receipt is checked for changed/missing sources on a new normal query. The offline viewer rechecks every retained receipt at report generation. These are historical comparisons, not modifications to the agent's conversation.
+The legacy CLI excerpt/inspection helpers remain for diagnostic compatibility but are not registered as agent tools. Experimental hooks are off by default and outside the recommended game-map workflow.
 
-## State and ownership
+## Protection and installation
 
-Runtime data lives under `.driftbrief/state/`. A canonical root plus resolved Git directory identifies each worktree. Complete index generations are immutable; a current pointer is atomically replaced after writing. Up to three generations and forty receipts are retained. Index data is bounded to approximately 12 MiB per full generation and 1 MiB per compact generation.
+Mapping writes only package-owned state. Engine build caches, dependencies, credentials, binary contents and escaping symlinks are excluded. Secret detection precedes source-derived persistence. Existing agent instructions remain under their native client's handling.
 
-Short publication locks and long-lived background ownership use distinct lock targets. Locks expire after ten seconds without their two-second heartbeat. Lock compromise stops publishing/ownership. Queries can independently reconcile while another client owns background refresh.
+The offline installer temporarily extracts its embedded runtime, invokes validated initialization, and cleans up. Only Node 22/24 is required. Configurations are parsed before owned changes, with original bytes recorded for recovery. No engine compilation, project script or model is executed.
 
-The background owner watches changes with a 500 ms debounce and reconciles every thirty seconds. EOF, broken stdout, termination or detected parent death cancels work, closes watchers, releases locks and ends the process. Cleanup has a 1.5-second fallback deadline. Arbitrary forced termination and inherited handles cannot be guaranteed on every platform.
+Uninstall restores unchanged originals or removes exact owned entries, preserving user edits. Runtime files remain for recovery. Native trust prompts remain native. Stdio closure and termination cancel work and stop watchers with bounded cleanup.
 
-## Installation
-
-All target configurations are parsed and collision-checked before mutation. JSON modifications preserve unrelated settings; Codex TOML receives a namespaced block. Original bytes and owned values are recorded locally. A failed installation rolls back unchanged applied configuration. Conflicting user edits are not overwritten.
-
-Uninstall restores original bytes when a configuration is unchanged. Otherwise it removes exact owned JSON entries or an exact TOML block, preserving modified values. Runtime files and receipts remain for recovery. Backups may include private configuration values and are ignored by the package's internal .gitignore.
-
-## Public interfaces
-
-`context({query, paths?, maxBytes?})` is the only MCP tool. Query: 1–8,000 characters; at most 20 path hints; payload budget: 1,024–32,000 bytes (default 8,000).
-
-The JSON result contains schema version, receipt ID, observation time, reconciliation time, coverage, evidence, omissions, invalidations and footprint. Each excerpt contains a relative path, line bounds, text, SHA-256, verification time, selection reasons and relevant manifest facts.
-
-The payload size counts its own metadata. Estimated tokens are bytes/4, independent of any provider tokenizer. MCP transport envelopes and tool schemas add further host overhead and are not included in that payload counter.
-
-CLI commands: init, context, mcp, launch codex, status, doctor, inspect, bench, uninstall. Internal hook command is an advisory adapter entrypoint.
+An observed hash is not semantic correctness; files can change afterward. Forced termination, adversarial filesystem races and virtual mounts are not universally guaranteed.

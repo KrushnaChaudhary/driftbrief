@@ -22,7 +22,7 @@ export async function git(root: string, args: string[], signal?: AbortSignal): P
 export async function identity(rootArg: string, signal?: AbortSignal): Promise<Identity> {
   const root = await fs.realpath(path.resolve(rootArg));
   const gitDir = await git(root, ['rev-parse', '--absolute-git-dir'], signal);
-  const head = await git(root, ['rev-parse', 'HEAD'], signal);
+  const head = gitDir ? await git(root, ['rev-parse', 'HEAD'], signal) : null;
   return { root, gitDir, head, id: hash(`${root}\0${gitDir ?? ''}`).slice(0, 24) };
 }
 // Reject symlinks at every component: both reads and writes stay within the selected root.

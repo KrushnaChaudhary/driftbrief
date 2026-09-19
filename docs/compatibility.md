@@ -6,7 +6,7 @@ Status: September 19, 2026. “Adapter implemented” is not the same as an end-
 | Codex | Project TOML MCP registration; opt-in UserPromptSubmit hook | Configuration lifecycle and hook contract tested; native discovery check recorded separately below |
 | Claude Code | Project .mcp.json; opt-in settings hook | Configuration lifecycle and hook contract tested; native discovery check recorded separately below |
 | Cursor | Project MCP registration and dedicated .mdc discovery rule | Configuration lifecycle tested; native Cursor session pending |
-| MCP protocol | Official SDK stdio server, one context tool | Actual SDK client initializes, lists/invokes tool, waits idle, observes edits, closes |
+| MCP protocol | Official SDK stdio server, one map tool | Actual SDK client initializes, lists/invokes tool, waits idle, observes edits, closes |
 | Windows / Node 24.14 | Build, parsers, retrieval, lifecycle, release | Locally exercised |
 | Windows / Node 22 | CI configured | CI result pending |
 | macOS / Node 22 and 24 | CI configured | CI result pending |

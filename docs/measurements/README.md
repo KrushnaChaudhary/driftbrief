@@ -1,20 +1,18 @@
 # Measurements
 
-Raw results are included in this directory. They are local engineering measurements, not proof of AI task acceleration.
+`game-map.json` measures Unity, Unreal, HTML5/Phaser and Cocos source-format fixtures with 80 unrelated files each, three repetitions per fixture. Expected links are declared separately from the implementation. Timings include a fresh Node process.
 
-- `runtime.json`: five fresh CLI process timings, five advisory hook timings, a 35-second Windows process CPU/RSS sample including scheduled reconciliation, and state size on a 30-file fixture.
-- `retrieval.json`: 12 retrieval checks (four synthetic queries, three repetitions) on 120 TypeScript files.
-- `client-discovery.json`: available native-client configuration discovery; pending approval is explicitly distinguished from a connected server.
+`runtime.json` measures CLI map startup, optional legacy hook overhead and a 35-second Windows CPU/RSS sample including scheduled reconciliation. Hooks are not the recommended game workflow.
 
-The latest runtime sample includes process startup in CLI/hook timings. A zero CPU delta means none was recorded at the operating system's sampling resolution over that short interval, not zero resource consumption.
+`client-discovery.json` separates native configuration discovery from approval and actual activation. `retrieval.json` is the older beta.1 excerpt-helper result, not a game-map measurement.
 
-No agent/model calls were used for these results. Provider input/output/cached tokens, billing and task success remain unmeasured. The recording's payload bytes include evidence metadata, but exclude transport envelopes and tool-schema overhead.
-
-Reproduce with:
+Reproduce:
 ```sh
 npm run build
-node run.mjs bench
+node scripts/game-bench.mjs
 node scripts/measure-runtime.mjs
 ```
 
-For task-level comparisons, follow [the paired evaluation protocol](../../evals/README.md). Do not compare these payloads against a hypothetical whole-repository dump and call the difference money saved.
+These fixtures are not engine-built games or completed agent tasks. Provider usage, task success and financial savings remain unmeasured. Payload counts include map metadata, excluding transport envelopes and the tool schema.
+
+[Validation](../validation.md) · [Opt-in evaluation](../../evals/README.md)

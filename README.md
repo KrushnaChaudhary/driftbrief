@@ -1,85 +1,89 @@
 # DriftBrief
-**Give your coding agent a compact brief, checked against your current source.**
+**Help AI understand how your game fits together before it starts building.**
 
-Drop in a folder, initialize it once, and use it from your coding tool. DriftBrief retrieves relevant source excerpts, records where they came from, and shows when older evidence no longer matches.
+AI can help plan systems and scaffold their foundations. DriftBrief gives it a compact map of the existing game to build on. Unity, Unreal and HTML5 projects connect code to scenes, prefabs and assets. DriftBrief helps an agent find those connections and choose which files to read. It refreshes automatically and exposes **one MCP tool**, with a **4 KB default response budget**.
 
-**v0.1.0-beta.1 · local · no account or API key · Node.js 22 or 24**
+Local · MIT · Node.js 22 or 24 · no model calls · no editor plugin
 
-[Recorded walkthrough](docs/demo/walkthrough.html) · [Evidence viewer](docs/demo/evidence.html) · [Compatibility](docs/compatibility.md) · [Measurements](docs/measurements/README.md)
+## Install once, with one command
 
-## See the point
-
-Rename a module or change a test script. The next request reads current files, retires the older receipt's evidence, and returns the updated source. Inspect the selected lines, selection reasons, source fingerprints, and omissions in an offline HTML report.
-
-This is a retrieval assistant, not a replacement coding agent. It does not modify your source, rewrite shell commands, skip tests, or call a model.
-
-## Install the portable folder
-
-Extract the portable ZIP into your project so it contains `.driftbrief/run.mjs`, then run:
+Download the self-contained `driftbrief-install.mjs` release file. From your game project's root, run:
 
 ```sh
-node .driftbrief/run.mjs init --clients codex,claude,cursor
+node /path/to/driftbrief-install.mjs
 ```
 
-Restart the selected clients and accept their normal project/MCP trust prompts. The installed Codex alpha build did not load project-local MCP configuration in discovery checks. For affected Codex CLI builds, use the scoped launcher: `node .driftbrief/run.mjs launch codex`. It supplies configuration for that invocation without changing global settings. Desktop activation on affected builds remains unverified. Configuration uses absolute local paths: after moving a project or Node installation, uninstall and initialize again. Existing user settings are preserved.
+That installs the bundled runtime into `.driftbrief/`, builds the index and configures Codex, Claude Code and Cursor. There is no archive extraction, npm install, Python, engine compilation or project dependency change. Restart your client and accept its native trust prompt.
 
-The MCP process starts with the client connection and stops when it closes. No operating-system service, global configuration change, or background model call is installed.
-
-Automatic prompt hooks are **experimental and off by default**. MCP retrieval works without them. For an explicit trial, add `--hooks` during initialization. Changing installation options requires uninstalling first.
-
-## Use it
-
-Your agent can call the single MCP tool `context({ query, paths?, maxBytes? })`. Cursor receives a small dedicated discovery rule; Codex and Claude receive the MCP tool description. Automatic hooks, when explicitly enabled, are available in Codex and Claude.
+If you already dropped the portable `.driftbrief/` folder into the project, the command is simply:
 
 ```sh
-node .driftbrief/run.mjs context "authenticate user and test command"
-node .driftbrief/run.mjs context "invoice total" --paths src,tests --max-bytes 4000
-node .driftbrief/run.mjs inspect --html
+node .driftbrief/run.mjs init
+```
+
+Optional: append `--clients claude,cursor` to select clients. Running installation twice preserves settings. The npm tarball is also prepared; the name has not been published, so no public `npx driftbrief` command is advertised yet.
+
+**Client caveat:** the tested Codex alpha ignores project-local MCP settings. Its CLI can use `node .driftbrief/run.mjs launch codex`; automatic desktop activation is not verified. Claude requires its native approval. Cursor's configuration is tested, but a live Cursor session is pending. See [compatibility](docs/compatibility.md). Installation cannot bypass the host's trust or fix an unsupported host integration.
+
+## The agent's workflow
+
+```text
+map()                           → small project overview
+map({ query: "PlayerMovement" }) → related scenes, prefabs, scripts and assets
+```
+
+The agent then reads the relevant paths through its normal tools. The map is not pasted into every prompt. Existing instructions stay under the client's control. No new manual workflow is required when you edit files.
+
+| Project | Map coverage |
+|---|---|
+| Unity | Scene/prefab → asset/script references resolved through .meta GUIDs; C# type names and base-type candidates; assemblies; declared Unity/package versions |
+| Unreal | .uproject modules, Build.cs dependencies, local header candidates, /Game asset paths in source/config, level and asset filenames |
+| HTML5 / Phaser | Local JS/TS imports, literal scene transitions and asset-loader paths; package versions |
+| Cocos Creator | Exact UUID links from serialized scene/prefab JSON through top-level .meta UUIDs |
+| Other browser engines | JS/TS imports and literal paths; Pixi, Three, Babylon and Laya package detection, with no invented scene graph |
+
+Unity/Cocos adapters are bounded lexical format readers. Unreal binary Blueprint graphs, Cocos compressed/subasset UUIDs, dynamic loaders, compiler aliases and live editor state are not fully resolved. Ambiguous or missing targets are reported, not guessed. No complete call graph is claimed.
+
+## Small and current
+
+- One agent tool; 4,000-byte default map, including provenance and omissions. Optional maximum: 12,000 bytes.
+- Two bounded relationship hops around a query; no whole-project dump.
+- Watchers refresh while the MCP connection lives. Each map request also reconciles eligible files and checks selected text hashes, so missed watcher events do not preserve stale selected links.
+- Unity Library/Temp and Unreal Binaries/Intermediate/Saved/DerivedDataCache are excluded, alongside dependencies, generated output, credential files and symlink escapes.
+- Metadata IDs are indexed without bloated source-keyword lists. Ordinary maps save no prompts, transcripts or receipt history.
+- No network, model, self-update, source edit, script execution, or operating-system service. Closing the client stops the MCP worker.
+
+An observed hash establishes source bytes at a time, not semantic correctness. Binary nodes report paths/existence only. A file may change after verification. Secret detection is heuristic; local state can contain project names and identifiers.
+
+Bounds: 5,000 text files, 32 MiB text budget, 512 KiB per text file; up to 5,000 opaque asset paths within 512 KiB metadata; three index generations. Coverage limits are visible.
+
+## Inspect or remove
+
+```sh
+node .driftbrief/run.mjs map "PlayerMovement"
 node .driftbrief/run.mjs doctor
 node .driftbrief/run.mjs uninstall
 ```
 
-Commands accept `--root <project>`. Context output is compact JSON. The default payload limit is 8,000 UTF-8 bytes; hooks cap the entire JSON response at 4,000 bytes. Token estimates use bytes divided by four and are **not provider usage or savings**.
+Uninstall removes unchanged owned integration entries and preserves user edits. Restart clients, then remove the runtime folder if no preserved entry needs it. Runtime paths are absolute; relocation requires reinitialization. Background operation never changes game files or the Git index.
 
-After uninstall, restart clients. Local evidence and the runtime remain in `.driftbrief/` for recovery; remove that folder once no preserved integration references need it. User-modified configuration entries are retained and reported.
+## Engine direction
 
-## What it understands
+One map interface, engine-specific connections underneath. Current coverage targets Unity, Unreal and HTML5; it does not claim complete understanding of every engine. **Planning to add Godot next.** See the [focused roadmap](docs/roadmap.md).
 
-- JavaScript, TypeScript, TSX and Python symbols through bundled Tree-sitter WASM parsers.
-- Explicit npm scripts, package manager declarations, and declared dependency ranges.
-- Python entrypoints, declared dependencies and pytest test paths from `pyproject.toml`.
-- Other languages as searchable UTF-8 text, with incomplete parsing disclosed.
+## Evidence and development
 
-It never executes `setup.py`, imports project modules, or guesses that a Python entrypoint is a test command.
-
-## What “checked” means
-
-Source excerpts are re-read and hashed when served. Watchers only accelerate refresh; MCP queries reconcile files themselves. A changed or unreadable candidate is omitted. Hooks use a smaller cached index and disclose best-effort coverage.
-
-A hash proves which bytes were observed, not semantic correctness or complete retrieval. Files can change afterward; existing AI conversation text cannot be retracted. Native file reads remain available.
-
-Git exclusions and `.driftbriefignore` apply. Dependency/generated folders, binary/large files, credential paths, symlinks and detected secrets are excluded. Secret detection is heuristic. Local indexes and evidence reports may contain proprietary project information. Selected excerpts pass through your existing AI client and its data handling.
-
-## Status and honest limits
-
-The official MCP SDK transport, parser assets, configuration lifecycle, freshness and failure paths are tested locally on Windows/Node 24. CI covers Windows/macOS/Linux on Node 22/24 when run. Native-client discovery checks and outstanding live-validation gaps are listed in [compatibility](docs/compatibility.md).
-
-**No task-level speedup or token savings have been established.** The [research](docs/research.md) is why task-quality evaluation comes before marketing percentages. Automatic hooks remain opt-in.
-
-V1 bounds: 5,000 eligible files, 32 MiB of source per reconciliation, 512 KiB per file, 40 receipts, three published index generations. Limits and parser failures appear as omissions. Local filesystems are supported; network/virtual mounts are best effort.
-
-## Build and package
+[Game map demo](docs/demo/map.html) · [Market research](docs/game-market-research.md) · [Measurements](docs/measurements/README.md) · [Validation](docs/validation.md)
 
 ```sh
 npm ci --ignore-scripts
 npm run check
 npm run demo
-npm run bench
+node scripts/game-bench.mjs
 npm run release:local
+node scripts/check-one-step.mjs
 ```
 
-Build output includes `run.mjs`, bundled parser assets, third-party notices and a dependency inventory. The npm package and portable ZIP need no runtime npm dependencies. Release files are generated under `release/`, with SHA-256 checksums. The package has not been published to npm by this build.
+No agent-level speedup or token savings have been established. Fixture navigation checks are not completed gameplay tasks. The optional paid-agent evaluation harness remains separate, and automatic prompt hooks remain experimental/off.
 
-[Architecture](docs/architecture.md) · [Maintenance](docs/maintenance.md) · [Evaluation protocol](evals/README.md) · [LinkedIn draft](docs/linkedin-draft.md)
-
-MIT licensed. No telemetry, self-updater, or cloud service.
+Version 0.1.0-beta.2. Local beta archives are prepared; publication and full native-client/cross-platform validation remain separate release gates. [Architecture](docs/architecture.md) · [Maintenance](docs/maintenance.md) · [LinkedIn draft](docs/linkedin-draft.md)

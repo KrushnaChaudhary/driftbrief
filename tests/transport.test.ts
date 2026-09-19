@@ -7,6 +7,7 @@ import { spawn } from 'node:child_process';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { init } from '../src/install.js';
+import { hash } from '../src/fs.js';
 const bundle=path.resolve('run.mjs');
 async function fixture(t:any){const root=await fs.mkdtemp(path.join(os.tmpdir(),'driftbrief-mcp-'));t.after(()=>fs.rm(root,{recursive:true,force:true,maxRetries:20,retryDelay:50}));return root;}
 test('official MCP client discovers, invokes, and sees source updates',async t=>{
@@ -15,11 +16,11 @@ test('official MCP client discovers, invokes, and sees source updates',async t=>
   const client=new Client({name:'driftbrief-contract-test',version:'1'});
   await client.connect(transport);
   try {
-    assert.deepEqual((await client.listTools()).tools.map(t=>t.name),['context']);
-    const first=await client.callTool({name:'context',arguments:{query:'authenticate'}});const brief=JSON.parse((first.content as any)[0].text);assert.match(brief.evidence[0].excerpt,/before/);
+    assert.deepEqual((await client.listTools()).tools.map(t=>t.name),['map']);
+    const first=await client.callTool({name:'map',arguments:{query:'authenticate'}});const brief=JSON.parse((first.content as any)[0].text);assert.equal(brief.verified[0].sha256,hash('function authenticate(){return "before";}'));
     await new Promise(resolve => setTimeout(resolve, 2500));
     await fs.writeFile(path.join(root,'auth.ts'),'function authenticate(){return "after";}');
-    const second=await client.callTool({name:'context',arguments:{query:'authenticate'}});assert.match(JSON.parse((second.content as any)[0].text).evidence[0].excerpt,/after/);
+    const second=await client.callTool({name:'map',arguments:{query:'authenticate'}});assert.equal(JSON.parse((second.content as any)[0].text).verified[0].sha256,hash('function authenticate(){return "after";}'));
   }finally{await client.close();}
 });
 test('MCP EOF during indexing terminates within bounded cleanup',async t=>{
@@ -45,9 +46,9 @@ test('two MCP hosts remain usable when one refresh owner exits',async t=>{
   const clients=[] as Client[];
   try{
     for(let i=0;i<2;i++){const transport=new StdioClientTransport({command:process.execPath,args:[bundle,'mcp','--root',root],stderr:'pipe'});transport.stderr?.on('data', () => {});const client=new Client({name:'two-host-'+i,version:'1'});await client.connect(transport);clients.push(client);}
-    await Promise.all(clients.map(client=>client.callTool({name:'context',arguments:{query:'sharedSource'}})));
+    await Promise.all(clients.map(client=>client.callTool({name:'map',arguments:{query:'sharedSource'}})));
     await new Promise(resolve=>setTimeout(resolve,2500));await clients[0].close();
     await fs.writeFile(path.join(root,'shared.ts'),'function sharedSource(){return 2;}');
-    const result=await clients[1].callTool({name:'context',arguments:{query:'sharedSource'}});assert.match(JSON.parse((result.content as any)[0].text).evidence[0].excerpt,/return 2/);
+    const result=await clients[1].callTool({name:'map',arguments:{query:'sharedSource'}});assert.equal(JSON.parse((result.content as any)[0].text).verified[0].sha256,hash('function sharedSource(){return 2;}'));
   }finally{await Promise.all(clients.map(client=>client.close()));}
 });

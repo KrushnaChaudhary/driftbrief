@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { identity, jsonFile } from './fs.js';
 import { context, serializeBrief } from './context.js';
+import { projectMap, encodeMap } from './map.js';
 import { init, uninstall, doctor } from './install.js';
 import { serve } from './mcp.js';
 import { report } from './viewer.js';
@@ -30,7 +31,7 @@ async function main() {
   const { command, positional, flags } = args(separator < 0 ? raw : raw.slice(0, separator));
   if (flags.version || command === 'version') { console.log(VERSION); return; }
   if (flags.help || command === 'help') {
-    console.log(`DriftBrief ${VERSION} — source-checked project context\n\nCommands:\n  init --clients codex,claude,cursor [--hooks]\n  context "task query" [--paths src,tests] [--max-bytes 8000]\n  mcp                 Start stdio MCP; lifetime belongs to its client\n  launch codex        Scoped CLI fallback for hosts ignoring project MCP config\n  status              Inspect the current index\n  doctor              Check installation without changing settings\n  inspect --html      Generate an offline evidence report\n  bench               Run a free deterministic retrieval benchmark\n  uninstall           Remove unchanged integration entries\n\nAll commands accept --root <project>. Prompt hooks are experimental and off by default.\nNo accounts, model calls, or network access. Source excerpts pass through your AI client.`); return;
+    console.log(`DriftBrief ${VERSION} — compact, current game-project map\n\nCommands:\n  init                One-time setup for Codex, Claude and Cursor\n  map [query]         Current game-project overview or focused connections\n  mcp                 Start stdio MCP; lifetime belongs to its client\n  launch codex        Scoped CLI fallback for hosts ignoring project MCP config\n  status              Inspect the current index\n  doctor              Check installation without changing settings\n  uninstall           Remove unchanged integration entries\n\nAll commands accept --root <project>. Prompt hooks are experimental and off by default.\nNo accounts, model calls, or network access. Source excerpts pass through your AI client.`); return;
   }
   if (![22,24].includes(Number(process.versions.node.split('.')[0]))) throw new Error('DriftBrief supports Node.js 22 and 24.');
   const root = await fs.realpath(path.resolve(String(flags.root ?? process.cwd())));
@@ -70,6 +71,10 @@ async function main() {
   let result: unknown;
   switch (command) {
     case 'init': result = await init(root, String(flags.clients ?? 'codex,claude,cursor').split(',') as any, flags.hooks === true); break;
+    case 'map': {
+      const budget = flags['max-bytes'] === undefined ? 4000 : Number(flags['max-bytes']);
+      console.log(encodeMap(await projectMap(root, { query: positional.join(' '), maxBytes: budget }), budget)); return;
+    }
     case 'context': {
       const query = positional.join(' '); if (!query) throw new Error('Provide a task query.');
       const maxBytes = flags['max-bytes'] === undefined ? 8000 : Number(flags['max-bytes']);

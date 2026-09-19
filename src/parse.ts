@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { gameInfo } from './games.js';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Parser, Language } from 'web-tree-sitter';
@@ -39,8 +40,10 @@ export function manifestFacts(file: string, text: string): Fact[] {
   return facts.filter(f => f.name.length <= 200 && f.value.length <= 400).slice(0, 80);
 }
 export async function parseDocument(file: string, text: string): Promise<Document> {
+  const game = gameInfo(file, text);
   const frequencies: Record<string, number> = Object.create(null);
-  for (const term of terms(text)) frequencies[term] = (frequencies[term] ?? 0) + 1;
+  const searchable = game.kind === 'metadata' ? '' : ['prefab','scene','asset','material','animator'].includes(game.kind) && game.engine === 'unity' ? game.labels.join(' ') : text;
+  for (const term of terms(searchable)) frequencies[term] = (frequencies[term] ?? 0) + 1;
   const boundedTerms = Object.fromEntries(Object.entries(frequencies).sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0])).slice(0, 300));
   const symbols: SymbolInfo[] = [];
   const extension = path.extname(file).toLowerCase();
@@ -71,5 +74,5 @@ export async function parseDocument(file: string, text: string): Promise<Documen
     finally { parser?.delete(); }
   }
   return { path: file, hash: hash(text), bytes: Buffer.byteLength(text), terms: boundedTerms, symbols,
-    facts: manifestFacts(file, text), parser: parserName, parseIncomplete };
+    facts: manifestFacts(file, text), parser: parserName, parseIncomplete, game };
 }

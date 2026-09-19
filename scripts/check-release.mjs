@@ -15,7 +15,7 @@ try{
   const run=async(...args)=>JSON.parse((await exec(process.execPath,[path.join(root,'.driftbrief/run.mjs'),...args,'--root',root],{windowsHide:true})).stdout);
   await run('init','--clients','codex,claude,cursor');
   assert.ok((await run('doctor')).checks.every(c=>c.ok));
-  assert.ok((await run('context','portable_sample')).evidence.some(e=>e.path==='example.py'));
+  assert.ok((await run('map','portable_sample')).nodes.some(e=>e.path==='example.py'));
   const removal=await run('uninstall');assert.deepEqual(removal.preserved,[]);
   console.log('Extracted portable ZIP passes initialization, WASM-backed retrieval, doctor and clean integration removal without node_modules.');
 }finally{await fs.rm(root,{recursive:true,force:true,maxRetries:20,retryDelay:50});}
