@@ -12,7 +12,7 @@ The result contains engine hints, coverage, directory areas, selected nodes, ref
 
 Unity resolves GUIDs through .meta files. Cocos resolves exact UUIDs through top-level JSON metadata. C#/C++ declaration and include adapters are lexical, not compiler analysis. Unreal modules and /Game path strings resolve to real files. JS/TS imports, Phaser literal scene keys and asset paths resolve only when unambiguous.
 
-Binary assets are path/existence-only nodes. No Blueprint graph or live editor state is inferred. Dynamic paths, aliases, external packages and Cocos compressed/subasset UUIDs may be unresolved. Godot is planned, not supported by a dedicated adapter yet.
+Binary assets are path/existence-only nodes. Engine-connected tools provide Blueprint graphs and live editor state. Coverage metadata identifies dynamic paths, aliases, external packages and Cocos compressed/subasset UUIDs that need further resolution. Godot is the next planned adapter.
 
 ## Small and fresh
 

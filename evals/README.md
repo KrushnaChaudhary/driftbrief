@@ -22,4 +22,4 @@ Use repeated per-task paired results, not aggregate payload bytes, for claims. A
 
 Before enabling automatic hooks by default, add a separate hook treatment arm with recorded activation and native trust. Before broader public claims, expand to representative real tasks/repositories and repeat trials. Keep an observed quality regression visible; do not hide it behind token reduction.
 
-The code is provided for opt-in evaluation. No billed agent evaluation was run during the package's initial build.
+The code is provided for explicitly invoked, complete-task evaluation using your existing agent allowance.

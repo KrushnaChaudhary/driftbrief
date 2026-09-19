@@ -30,4 +30,4 @@ The primary workflow is install once → agent asks for a map → agent reads th
 
 Refactors/renames are verification cases, not features users must perform. The beta no longer markets historical evidence inspection. No autonomy, asset editing, conversation memory, cloud documentation service or always-running OS daemon is added.
 
-A useful implementation is not proof of time or token savings. Local fixture navigation and overhead are measured separately from agent task quality. No savings percentages are advertised.
+Local fixture navigation and overhead are measured in the repository. Complete-task evaluation has a separate protocol for quality, elapsed time and provider usage.

@@ -45,5 +45,13 @@
     "web-tree-sitter": "0.27.0",
     "zod": "^3.25.76",
     "playwright-core": "^1.58.0"
+  },
+  "repository": {
+    "url": "git+https://github.com/KrushnaChaudhary/driftbrief.git",
+    "type": "git"
+  },
+  "homepage": "https://krushnachaudhary.github.io/driftbrief/",
+  "bugs": {
+    "url": "https://github.com/KrushnaChaudhary/driftbrief/issues"
   }
 }

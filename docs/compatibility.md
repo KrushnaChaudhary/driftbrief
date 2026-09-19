@@ -1,38 +1,26 @@
-# Compatibility
-Status: September 19, 2026. “Adapter implemented” is not the same as an end-to-end verified native-client workflow.
+# Client setup and coverage
 
-| Surface | Implementation | Verification |
-| --- | --- | --- |
-| Codex | Project TOML MCP registration; opt-in UserPromptSubmit hook | Configuration lifecycle and hook contract tested; native discovery check recorded separately below |
-| Claude Code | Project .mcp.json; opt-in settings hook | Configuration lifecycle and hook contract tested; native discovery check recorded separately below |
-| Cursor | Project MCP registration and dedicated .mdc discovery rule | Configuration lifecycle tested; native Cursor session pending |
-| MCP protocol | Official SDK stdio server, one map tool | Actual SDK client initializes, lists/invokes tool, waits idle, observes edits, closes |
-| Windows / Node 24.14 | Build, parsers, retrieval, lifecycle, release | Locally exercised |
-| Windows / Node 22 | CI configured | CI result pending |
-| macOS / Node 22 and 24 | CI configured | CI result pending |
-| Linux / Node 22 and 24 | CI configured | CI result pending |
+DriftBrief uses a single stdio MCP map tool.
 
-## Observed native-client results
+| Client | Setup |
+|---|---|
+| Codex CLI 0.154.0-alpha.6.2 | Run `node .driftbrief/run.mjs launch codex` to supply project MCP settings for the current session |
+| Codex clients with project MCP configuration | Initialization writes .codex/config.toml; follow the host's project trust flow |
+| Claude Code | Initialization writes .mcp.json; approve the project server in Claude and restart |
+| Cursor | Initialization writes .cursor/mcp.json and a small discovery rule; enable the server in Cursor's MCP settings |
 
-Codex CLI 0.154.0-alpha.6.2 did not expose the generated project MCP entry through `mcp get` or the read-only app-server config probe, including the trusted fixture probe. Do not treat this installed build as verified for automatic project-local activation. The scoped fallback `node .driftbrief/run.mjs launch codex` supplies MCP settings for the current CLI invocation and leaves global configuration unchanged. Its native discovery result is recorded in the diagnostic JSON. This does not establish desktop-client activation.
+The scoped Codex launcher addresses the tested alpha's project configuration behavior and preserves global settings. Native trust and server enablement are controlled by each coding client.
 
-Claude Code 2.1.246 discovered the project entry and reported **Pending approval**. No approval bypass or model call was used. Cursor native validation remains pending.
+## Verification surfaces
 
-## Native trust and restarts
+Configuration lifecycle tests cover all three adapters. The official MCP SDK exercises discovery, map calls, source refresh, concurrent clients and connection closure. Native discovery observations are retained in [diagnostics](measurements/client-discovery.json).
 
-- Codex project MCP/hooks load only with the host's project trust. [Official MCP documentation](https://learn.chatgpt.com/docs/extend/mcp) and [hooks](https://learn.chatgpt.com/docs/hooks).
-- Claude project MCP definitions need native approval; an unapproved server can appear as pending without connecting. [Official MCP documentation](https://code.claude.com/docs/en/mcp) and [hooks](https://code.claude.com/docs/en/hooks).
-- Cursor has its own MCP enablement/approval settings. The first release uses agent-invoked MCP rather than assuming prompt injection parity. [MCP](https://cursor.com/docs/mcp), [rules](https://cursor.com/docs/rules), [hooks](https://cursor.com/docs/hooks).
+The [CI matrix](https://github.com/KrushnaChaudhary/driftbrief/actions) targets Windows, macOS and Linux on Node 22 and 24. [Local results](validation.md) identify the machine and checks used.
 
-The installer does not bypass native approvals. Restart clients after installation or removal. Do not advertise “fully tested in all three clients” until actual discovery, invocation, source refresh and removal have been recorded in each native host.
+## Operational scope
 
-## Known limitations
+Use Node 22 or 24 on the project's machine. Local filesystems are the primary target. Runtime and root paths are absolute, so moving a project or Node installation requires reinitialization.
 
-- Absolute runtime/root paths require reinitialization after relocation.
-- Node 22 or 24 is required on the same machine as the local project and client.
-- Source parsing has declared syntax limits; unsupported/dynamic constructs use text fallback.
-- Network mounts, unusual virtual filesystems, adversarial filesystem races and forced process termination are not universally guaranteed.
-- A user-edited .driftbrief/.gitignore is preserved. Review ignored state if changing it.
-- The hooks are experimental. Native model usage/time/quality improvements have not been measured.
+Map coverage is based on static project files. Binary asset entries describe path/existence; engine-connected tools provide live editor and Blueprint graph details. Optional hooks remain an explicit experimental setting.
 
-Native discovery observations will be saved in `docs/measurements/client-discovery.json` when available; pending approval is not counted as a successful connection.
+[Codex MCP](https://learn.chatgpt.com/docs/extend/mcp) · [Claude MCP](https://code.claude.com/docs/en/mcp) · [Cursor MCP](https://cursor.com/docs/mcp)

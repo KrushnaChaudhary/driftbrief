@@ -1,28 +1,34 @@
-AI can help plan a game system and build its foundation.
+Before AI builds the next system, give it a map of the game you already have.
 
-But before it does that, it needs to understand the game it is joining.
+AI can help plan architecture and scaffold a foundation. The useful next step is connecting that work to the actual project.
 
-Where does this feature live?
 Which scene uses this prefab?
 Which script drives it?
-What existing system should the new code connect to?
+Where should the new system connect?
 
-That is what I am building DriftBrief for.
+I built DriftBrief to make those connections easier for coding agents to find.
 
-A small, automatically updated project map for coding agents—so the architecture they propose and the code they scaffold can start from the actual project.
+One installation command.
+One map tool.
+A compact map that stays updated as the project changes.
 
-One installation command. One map tool. A compact response instead of a giant context dump.
-
-The interface stays the same across engines; the connections underneath are engine-specific:
+The interface stays the same across engines:
 • Unity: scripts, prefabs, scenes and GUID references.
-• Unreal: modules, source relationships and asset locations.
-• HTML5: imports, scene transitions and asset paths, including exact Cocos UUID links.
+• Unreal: source modules, header relationships and asset locations.
+• HTML5: imports, scene transitions and asset paths, including Cocos UUID links.
 
-It runs locally, requires no API key or editor plugin, and does not edit the game.
+It runs locally and keeps the default map within 4 KB, including source references and metadata.
 
-It is an early beta. Binary Blueprint internals and live editor state are outside this version, and I am measuring usefulness before claiming time or token savings.
+The repo includes 36 automated tests, reproducible game fixtures and an interactive map demo.
 
-[Add repository link after publication]
-[Attach the game-map demo]
+Explore the repo:
+https://github.com/KrushnaChaudhary/driftbrief
+
+Try the map demo:
+https://krushnachaudhary.github.io/driftbrief/
+
+Where does your coding agent spend the most time finding its way around a game project?
 
 Planning to add Godot next.
+
+#GameDev #AI #Unity #UnrealEngine #OpenSource
