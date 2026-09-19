@@ -1,0 +1,35 @@
+name: Compatibility and release checks
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [22, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm run demo
+      - run: npm run release:local
+      - run: node scripts/check-release.mjs
+      - run: node scripts/check-one-step.mjs
+      - run: node scripts/game-bench.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: driftbrief-${{ matrix.os }}-node${{ matrix.node }}
+          path: release/
+          retention-days: 14
