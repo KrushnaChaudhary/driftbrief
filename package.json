@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/proper-lockfile": "^4.1.4",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.2",
     "fflate": "^0.8.2",
     "tree-sitter-javascript": "0.25.0",
     "tree-sitter-python": "^0.25.0",
