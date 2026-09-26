@@ -39,7 +39,7 @@
     "typescript": "^5.9.0",
     "@iarna/toml": "^2.2.5",
     "@modelcontextprotocol/sdk": "1.30.0",
-    "ignore": "^7.0.5",
+    "ignore": "^7.0.10",
     "jsonc-parser": "^3.3.1",
     "proper-lockfile": "^4.1.2",
     "web-tree-sitter": "0.27.0",
